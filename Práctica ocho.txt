@@ -1,0 +1,669 @@
+const int a = 2;
+const int b = 3;
+const int c = 4;
+const int d = 5;
+const int e = 6;
+const int f = 7;
+const int g = 8;
+const int d1 = 9;
+const int d2 = 10;
+
+  
+int buttonStateA = 0;
+int buttonStateB = 0;
+int buttonStateC = 0;
+int buttonStateD = 0;
+int buttonStateS0 = 0;
+int buttonStateS1= 0;
+int buttonStateS2  =0;
+
+
+void setup() {
+  
+  
+  pinMode(a, OUTPUT);
+  pinMode(b, OUTPUT);
+  pinMode(c, OUTPUT);
+  pinMode(d, OUTPUT);
+  pinMode(e, OUTPUT);
+  pinMode(f, OUTPUT);
+  pinMode(g, OUTPUT);
+  pinMode(d1, OUTPUT);
+  pinMode(d2, OUTPUT);
+
+pinMode(A0,INPUT); //Salida del led
+ pinMode(A1,INPUT); //Salida del led
+ pinMode(A2,INPUT); //Salida del led
+ pinMode(A3,INPUT); //Salida del led
+  
+  Serial.begin(9600);
+}
+void loop(){
+
+   if (Serial.available() > 0) {
+    // read the incoming string:
+    char data = Serial.read();
+
+  if (data == 'S') {
+        buttonStateS0=0;
+        buttonStateS1=0;
+        buttonStateS2=0;
+        Serial.println("Suma Activada");
+        }
+  if (data == 'R') {
+        buttonStateS0=0;
+        buttonStateS1=0;
+        buttonStateS2=1;
+        Serial.println("Resta Activada");
+        }
+  
+  if (data == 'M') {
+        buttonStateS0=0;
+        buttonStateS1=1;
+        buttonStateS2=0;
+        Serial.println("Multiplicación Activada");
+        }
+  
+  if (data == 'D') {
+        buttonStateS0=0;
+        buttonStateS1=1;
+        buttonStateS2=1;
+        Serial.println("División Activada");
+        }
+  
+  if (data == 'A') {
+        buttonStateS0=1;
+        buttonStateS1=0;
+        buttonStateS2=0;
+        Serial.println("AND Activada");
+        }
+  
+  if (data == 'O') {
+        buttonStateS0=1;
+        buttonStateS1=0;
+        buttonStateS2=1;
+        Serial.println("OR Activada");
+        }
+  
+
+if (data == 'X') {
+        buttonStateS0=1;
+        buttonStateS1=1;
+        buttonStateS2=0;
+        Serial.println("XOR Activada");
+        }
+  
+
+  if (data == 'N') {
+        buttonStateS0=1;
+        buttonStateS1=1;
+        buttonStateS2=1;
+        Serial.println("NOT Activada");
+        }
+   }
+  
+
+
+
+buttonStateA = digitalRead(A0);
+ buttonStateB = digitalRead(A1);
+ buttonStateC = digitalRead(A2);
+ buttonStateD = digitalRead(A3);
+  
+  
+  int suma=0;
+  int resta=0;
+  int er=0;
+  int nt=0;
+  
+  
+  
+  
+
+
+if ((buttonStateA ^ buttonStateB)&&(!buttonStateS0)&&(!buttonStateS1)&&(!buttonStateS2)) {
+//digitalWrite(s0, HIGH);
+//digitalWrite(S1, LOW);}
+suma+=1;
+}
+if ((buttonStateC ^ buttonStateD) ^ (buttonStateA && buttonStateB)&&(!buttonStateS0)&&(!buttonStateS1)&&(!buttonStateS2)) {
+//digitalWrite(s1, HIGH);
+suma+=2;
+}
+if ((buttonStateC ^ buttonStateD)&& (buttonStateA && buttonStateB)&&(!buttonStateS0)&&(!buttonStateS1)&&(!buttonStateS2)) {
+//digitalWrite(s2, HIGH);
+suma+=4;
+}
+if ((buttonStateC && buttonStateD)&&(!buttonStateS0)&&(!buttonStateS1)&&(!buttonStateS2)) {
+//digitalWrite(s2, HIGH);
+suma+=4;
+}
+
+
+//RESTA
+if ((buttonStateA ^ buttonStateB)&&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) {
+//digitalWrite(s0, HIGH);
+resta+=1;
+}
+if ((buttonStateC ^ buttonStateD) ^ (!buttonStateA && buttonStateB) &&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) {
+//digitalWrite(s1, HIGH);
+resta+=2;
+
+}
+
+if ((buttonStateA && buttonStateD) && (!buttonStateB && !buttonStateC) &&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) {
+//digitalWrite(s1, HIGH);
+resta+=-4;
+
+}
+if ((!buttonStateC && buttonStateD) && (buttonStateA && buttonStateB) &&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) {
+//digitalWrite(s2, HIGH);
+resta+=-4;
+}
+
+if ((buttonStateC && buttonStateD) && (!buttonStateA && buttonStateB) &&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) {
+//digitalWrite(s2, HIGH);
+resta+=-4;
+}
+if ((!buttonStateC && !buttonStateD) && (!buttonStateA && buttonStateB) &&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) {
+//digitalWrite(s2, HIGH);
+resta+=-4;
+}
+if ((!buttonStateC && buttonStateD) && (!buttonStateA && buttonStateB) &&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) 
+{
+//digitalWrite(s2, HIGH);
+resta+=-4;
+}
+if ((!buttonStateC && buttonStateD) && (!buttonStateA && !buttonStateB)&&(!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) {
+//digitalWrite(s2, HIGH);
+resta+=-4;
+
+}
+
+//Multiplicación
+if ((buttonStateA && buttonStateB) && (!buttonStateS0) && (buttonStateS1) && (!buttonStateS2)) {
+ //digitalWrite(s0, HIGH);
+  suma+=1;
+ }
+ if ((buttonStateC && buttonStateB) ^ (buttonStateD && buttonStateA) && (!buttonStateS0) && (buttonStateS1) && (!buttonStateS2)) {
+ //digitalWrite(s1, HIGH);
+  suma+=2;
+ }
+ if (((buttonStateC && buttonStateB) && (buttonStateD && buttonStateA)) ^ (buttonStateC && buttonStateD) && (!buttonStateS0) && (buttonStateS1) && (!buttonStateS2)) {
+ //digitalWrite(s2, HIGH);
+ suma+=4;
+ }
+ if ((buttonStateC && buttonStateB) && (buttonStateD && buttonStateA) && (buttonStateC && buttonStateD) && (!buttonStateS0) && (buttonStateS1) && (!buttonStateS2)) {
+ //digitalWrite(s3,HIGH);
+  suma+=8;
+ }
+
+ //División 
+if ((!buttonStateD && !buttonStateB) && (!buttonStateS0) && (buttonStateS1) && (buttonStateS2)){
+ //digitalWrite(s3,HIGH);
+ er=1;
+ suma=90;
+ }
+
+ if ((buttonStateC && buttonStateB && !buttonStateD) && (!buttonStateS0) && (buttonStateS1) && (buttonStateS2)) {
+ //digitalWrite(s1, HIGH);
+ suma+=2;
+ }
+ if ((buttonStateA && buttonStateB && !buttonStateD) && (!buttonStateS0) && (buttonStateS1) && (buttonStateS2)) {
+// digitalWrite(s0, HIGH);
+suma+=1;
+ }
+ if ((buttonStateC && buttonStateD && !buttonStateB) && (!buttonStateS0) && (buttonStateS1) && (buttonStateS2)) {
+ //digitalWrite(s0, HIGH);
+ suma+=1;
+ }
+ if ((buttonStateA && buttonStateB && buttonStateC && buttonStateD) && (!buttonStateS0) && (buttonStateS1) && (buttonStateS2)) {
+ suma+=1;
+ }
+
+//AND
+//AND
+if((buttonStateA && buttonStateB)&&(buttonStateC && buttonStateD)&& (buttonStateS0) && (!buttonStateS1) && (!buttonStateS2)){
+  suma+=1;
+}
+
+
+//OR
+if((buttonStateS0) && (!buttonStateS1) && (buttonStateS2)){
+  if((buttonStateA || buttonStateB)||(buttonStateC || buttonStateD) ){
+    suma+=1;
+  }
+  
+}
+//XOR
+if((buttonStateA ^ buttonStateB) ^ (buttonStateC ^ buttonStateD) && (buttonStateS0) && (buttonStateS1) && (!buttonStateS2)){
+  suma=1;
+}
+//NOT
+if((!buttonStateA)&& (buttonStateS0) && (buttonStateS1) && (buttonStateS2)){
+ //digitalWrite(s0,LOW);
+ nt+=2;
+}
+if((buttonStateA)&& (buttonStateS0) && (buttonStateS1) && (buttonStateS2)){
+ //digitalWrite(s0,LOW);
+ nt+=-3;
+}
+if((!buttonStateB)&& (buttonStateS0) && (buttonStateS1) && (buttonStateS2)){
+ //digitalWrite(s1,LOW);
+ nt+=7;
+}
+if((buttonStateB)&& (buttonStateS0) && (buttonStateS1) && (buttonStateS2)){
+ //digitalWrite(s1,LOW);
+ nt+=3;
+}
+
+
+
+
+  for( int i=0 ; i < 1;  i++){
+  
+    if((suma==0 && (!buttonStateS0)&&(!buttonStateS1)&&(!buttonStateS2)) || (resta==0 && (!buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2))|| (suma==0 && (!buttonStateS0)&&(buttonStateS1)&&(!buttonStateS2))|| (suma==0 && (!buttonStateS0)&&(buttonStateS1)&&(buttonStateS2)) || (suma==0 && (buttonStateS0)&&(!buttonStateS1)&&(!buttonStateS2))|| (suma==0 && (buttonStateS0)&&(!buttonStateS1)&&(buttonStateS2)) || (nt==0 && (buttonStateS0)&&(buttonStateS1)&&(buttonStateS2)) || (suma==0 && (buttonStateS0) && (buttonStateS1) && (!buttonStateS2))){
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+        digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, HIGH);
+        digitalWrite(d2, LOW);
+
+        
+        delay(1);
+    }
+    if(suma==1 || resta==1){
+        digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+        digitalWrite(a, LOW);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, LOW);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+
+      delay(1);
+    }
+    
+    if(suma==2|| resta==2){
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        delay(1);
+
+        digitalWrite(a, HIGH);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, LOW);
+      digitalWrite(d, HIGH);
+      digitalWrite(e, HIGH);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+      delay(1);
+    }
+    if(suma==3|| resta==3){
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+        digitalWrite(a, HIGH);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, HIGH);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, HIGH);
+        digitalWrite(d2, LOW);
+
+        delay(1);
+    }
+
+    if(suma==4){
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+       digitalWrite(a, LOW);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, HIGH);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, HIGH);
+        digitalWrite(d2, LOW);
+
+        delay(1);
+    }
+
+    if(suma==5){
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+       digitalWrite(a, HIGH);
+      digitalWrite(b, LOW);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, HIGH);
+      digitalWrite(e, LOW);
+      digitalWrite(f, HIGH);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+
+        delay(1);
+    }
+      
+    
+    if(suma==6){
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+        digitalWrite(a, HIGH);
+        digitalWrite(b, LOW);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, HIGH);
+        digitalWrite(d1, HIGH);
+        digitalWrite(d2, LOW);
+
+        delay(1);
+    }
+
+    if(suma==9){
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+        digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, LOW);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, HIGH);
+        digitalWrite(d1, HIGH);
+        digitalWrite(d2, LOW);
+
+        delay(1);
+    }
+    if(resta==-1){
+
+      digitalWrite(a, LOW);
+      digitalWrite(b, LOW);
+      digitalWrite(c, LOW);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+
+      digitalWrite(d1, LOW);
+      digitalWrite(d2, HIGH);
+      delay(1);
+
+      digitalWrite(a, LOW);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, LOW);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+
+      delay(1);
+    }
+    if(resta==-2){
+
+      digitalWrite(a, LOW);
+      digitalWrite(b, LOW);
+      digitalWrite(c, LOW);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+
+      digitalWrite(d1, LOW);
+      digitalWrite(d2, HIGH);
+      delay(1);
+
+      digitalWrite(a, HIGH);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, LOW);
+      digitalWrite(d, HIGH);
+      digitalWrite(e, HIGH);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+      delay(1);
+    }
+    if(resta==-3){
+
+      digitalWrite(a, LOW);
+      digitalWrite(b, LOW);
+      digitalWrite(c, LOW);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+
+      digitalWrite(d1, LOW);
+      digitalWrite(d2, HIGH);
+      delay(1);
+
+      digitalWrite(a, HIGH);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, HIGH);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+      delay(1);
+    }
+    
+    if(er==1){
+      digitalWrite(a, HIGH);
+      digitalWrite(b, LOW);
+      digitalWrite(c, LOW);
+      digitalWrite(d, HIGH);
+      digitalWrite(e, HIGH);
+      digitalWrite(f, HIGH);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, LOW);
+      digitalWrite(d2, HIGH);
+      delay(1);
+
+      digitalWrite(a, LOW);
+      digitalWrite(b, LOW);
+      digitalWrite(c, LOW);
+      digitalWrite(d, LOW);
+      digitalWrite(e, HIGH);
+      digitalWrite(f, LOW);
+      digitalWrite(g, HIGH);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+      delay(1);
+    }
+      if(nt==9){
+        digitalWrite(a, LOW);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+        digitalWrite(a, LOW);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, LOW);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+
+      delay(1);
+    }
+
+    if(nt==5){
+        
+
+        digitalWrite(a, LOW);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, LOW);
+      digitalWrite(d1, LOW);
+      digitalWrite(d2, HIGH);
+
+      delay(1);
+      digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, HIGH);
+        digitalWrite(d2, LOW);
+
+        
+        delay(1);
+    }
+
+    if(nt==4){
+        digitalWrite(a, HIGH);
+        digitalWrite(b, HIGH);
+        digitalWrite(c, HIGH);
+        digitalWrite(d, HIGH);
+        digitalWrite(e, HIGH);
+        digitalWrite(f, HIGH);
+        digitalWrite(g, LOW);
+        digitalWrite(d1, LOW);
+        digitalWrite(d2, HIGH);
+
+        
+        delay(1);
+
+        digitalWrite(a, LOW);
+      digitalWrite(b, HIGH);
+      digitalWrite(c, HIGH);
+      digitalWrite(d, LOW);
+      digitalWrite(e, LOW);
+      digitalWrite(f, LOW);
+      digitalWrite(g, LOW);
+      digitalWrite(d1, HIGH);
+      digitalWrite(d2, LOW);
+
+      delay(1);
+    }
+
+  }
+}
+
+  
+  
+  
+  
+
+
+
+
